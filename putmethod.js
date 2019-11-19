@@ -11,13 +11,13 @@ var express = require('express');
   test.use(bodyParser())
   con.connect();
   test.use(bodyParser.urlencoded({ extended: true }));
-  test.delete("/mydb", function(req, res) {
-  var sql =  "DELETE from employee WHERE name = ('"+req.body.name+"')";
+  test.put("/mydb", function(req, response) {
+  var sql =  "UPDATE employee SET address = " +req.body.address+ " WHERE name = " +req.body.name+ " ";
   con.query(sql, function (err, res) {
   if(err){
-      res.status(400).send('error');
+      response.status(400).send('error');
       }else{
-      console.log("one item deleted");
+      console.log("one record updated");
   }
 });
 });
@@ -25,3 +25,7 @@ var express = require('express');
 test.listen(3007,function(){
   console.log("listening to 3007");
 });
+//PUT API
+// app.put("/api/user/:id", function(req , res){
+  //              var query = "UPDATE [user] SET Name= " + req.body.Name  +  " , Email=  " + req.body.Email + "  WHERE Id= " + req.params.id;
+    //            executeQuery (res, query);
