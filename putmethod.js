@@ -11,21 +11,23 @@ var express = require('express');
   test.use(bodyParser())
   con.connect();
   test.use(bodyParser.urlencoded({ extended: true }));
-  test.put("/mydb", function(req, response) {
-  var sql =  "UPDATE employee SET address = " +req.body.address+ " WHERE name = " +req.body.name+ " ";
-  con.query(sql, function (err, res) {
-  if(err){
-      response.status(400).send('error');
-      }else{
-      console.log("one record updated");
-  }
-});
-});
+  test.put("/mydb", function(req, res) {
+  var sql =  "UPDATE employee SET address = ('" +req.body.address+ "') WHERE name = ('" +req.body.name+ " ')";
+  con.query(sql, function (err, reult) {
+      var response = {}
+          if(err){
+            response.msg = "error"
+            res.status(400).send(response);
+          }else{
+            console.log("one item updated");
+            response.msg = "success"
+            res.status(200).send(response);
+          }
+      });
+  });
 
 test.listen(3007,function(){
   console.log("listening to 3007");
 });
-//PUT API
-// app.put("/api/user/:id", function(req , res){
-  //              var query = "UPDATE [user] SET Name= " + req.body.Name  +  " , Email=  " + req.body.Email + "  WHERE Id= " + req.params.id;
-    //            executeQuery (res, query);
+
+ //var sql = "UPDATE week SET agenda =('"+req.body.agenda+ "') WHERE user_id=('"+req.body.user_id+"') ";
