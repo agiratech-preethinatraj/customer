@@ -10,17 +10,19 @@ var con = mysql.createConnection({
 foo.use(bodyParser())
 con.connect();
 foo.use(bodyParser.urlencoded({ extended: true }));
-foo.delete("/db/v1", function(req, response) {
+foo.delete("/db/v1", function(req, res) {
   var sql = "DELETE from week WHERE user_id = ('"+req.body.user_id+"')";
   con.query(sql, function (err, result) {
-  console.log("test");
-  if(err){
-    response.status(400).send('error');
-    }else{
-    console.log("id deleted");
-    }
+    var response = {}
+      if(err){
+        response.msg = "error"
+        res.status(400).send(response);
+      }else{
+        response.msg = ("no. of item deleted:")+result.affectedRows
+        res.status(200).send(response);
+      }
+    });
   });
-});
 
 foo.listen(3002,function(){
     console.log("listening to 3002");
